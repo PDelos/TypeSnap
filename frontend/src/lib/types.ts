@@ -16,3 +16,12 @@ export interface Information {
     created: string;
     updated: string;
 }
+
+export interface User {
+    id: string;
+    email: string;
+    emailVisibility: boolean;
+    verified: boolean;
+    created: string;
+    updated: string;
+}

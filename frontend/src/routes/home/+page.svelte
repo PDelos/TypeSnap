@@ -1,0 +1,34 @@
+<script>
+  import { goto } from '$app/navigation';
+</script>
+
+<main class="flex flex-col h-screen w-full"> 
+  <!-- Top Section: Title -->
+  <section class="flex flex-col justify-end items-center h-[40%]">
+    <h1 class="text-8xl font-extrabold">GLYPHS</h1>
+    <p class="text-xl">VOX-ATYPI</p>
+  </section>
+
+  <!-- Middle Section: Spacer or Content -->
+  <section class="h-[15%]">
+  </section>
+
+  <!-- Bottom Section: Buttons -->
+  <section class="flex justify-center h-[45%]">
+    <div class="flex flex-row justify-center gap-8 w-[80%]">
+      <button 
+        on:click={() => goto('/categories')}
+        class="h-[30%] w-[50%] font-semibold rounded-lg bg-[#F7F7F7] text-[#1C1C1C] hover:bg-[#FF00DB] hover:text-[#F7F7F7]"
+      >
+        TYPOGRAPHY CATEGORIES
+      </button>
+
+      <button 
+        on:click={() => goto('/capture')}
+        class="h-[30%] w-[50%] font-semibold rounded-lg bg-[#F7F7F7] text-[#1C1C1C] hover:bg-[#FF00DB] hover:text-[#F7F7F7]"
+      >
+        CATEGORIZE YOUR TYPOGRAPHY
+      </button>
+    </div>
+  </section>
+</main>

@@ -1,19 +1,5 @@
-import { pb } from '$lib/pocketbase';
-import type { Typography } from '$lib/types';
-import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
-  try {
-    const records = await pb.collection('typographies').getFullList<Typography>();
-    // console.log('Fetched typographies:', records);
-    
-    return {
-      typographies: records
-    };
-  } catch (error) {
-    console.error('Error fetching typographies:', error);
-    return {
-      typographies: []
-    };
-  }
-};
+export function load() {
+  throw redirect(307, '/home');
+}
