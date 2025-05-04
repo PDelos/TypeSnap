@@ -17,14 +17,14 @@
   <section class="flex justify-center h-[45%]">
     <div class="flex flex-row justify-center gap-8 w-[80%]">
       <button 
-        on:click={() => goto('/categories')}
+        onclick={() => goto('/categories')}
         class="h-[30%] w-[50%] font-semibold rounded-lg bg-[#F7F7F7] text-[#1C1C1C] hover:bg-[#FF00DB] hover:text-[#F7F7F7]"
       >
         TYPOGRAPHY CATEGORIES
       </button>
 
       <button 
-        on:click={() => goto('/capture')}
+        onclick={() => goto('/capture')}
         class="h-[30%] w-[50%] font-semibold rounded-lg bg-[#F7F7F7] text-[#1C1C1C] hover:bg-[#FF00DB] hover:text-[#F7F7F7]"
       >
         CATEGORIZE YOUR TYPOGRAPHY
