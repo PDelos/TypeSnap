@@ -3,6 +3,7 @@ export interface Typography {
     name: string;
     type: string;
     info: string;
+    gimage: string;
     created: string;
     updated: string;
     expand?: {

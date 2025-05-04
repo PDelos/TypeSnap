@@ -1,33 +1,41 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-
+    import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+  
     let { data } = $props();
     
-    // Get all typographies
     const typographies = data.typographies;
-    
-    // Get current type from page parameters
     const currentType = data.type;
     
-    // Filter typographies by the current type
-    const filteredTypographies = $derived(typographies.filter(typography => typography.type === currentType));
-</script>
-
-<main class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Typography: {currentType}</h1>
+    const filteredTypographies = $derived(
+      typographies.filter(typography => typography.type === currentType)
+    );
+  
+    function getImageUrl(type_id: string, gimage: string) {
+      return `${PUBLIC_POCKETBASE_URL}/api/files/typographies/${type_id}/${gimage}`;
+    }
+  </script>
+  
+  <main class="flex flex-col items-center mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-center">Typography: {currentType}</h1>
     
-    <div class="gap-6 flex flex-col justify-center items-center">
-        {#if filteredTypographies.length === 0}
-            <p class="text-gray-500">No typographies found with type "{currentType}"</p>
-        {:else}
-            {#each filteredTypographies as typography}
+    <div class="grid grid-cols-2 w-200 gap-12 place-items-center overflow-y-auto no-scrollbar">
+    {#each filteredTypographies as typography}
+        <div>
+            <h2 class="text-xl font-bold mb-4">{typography.name}</h2>
             <button 
-                onclick={() => goto('/'+typography.id)}
-                class="h-[30%] w-[50%] font-semibold rounded-lg bg-[#F7F7F7] text-[#1C1C1C] hover:bg-[#FF00DB] hover:text-[#F7F7F7]"
+                onclick={() => goto('/' + typography.id)}
+                class="flex justify-center items-center rounded-lg border-2 border-[#F7F7F7] hover:bg-[#FF00DB] p-4 w-60"
             >
-                {typography.name}
+                <img 
+                    src={getImageUrl(typography.id, typography.gimage)} 
+                    alt={typography.name} 
+                    class="m-4" 
+                />
             </button>
-            {/each}
-        {/if}
+        </div>
+    {/each}
     </div>
-</main>
+    
+  </main>
+  

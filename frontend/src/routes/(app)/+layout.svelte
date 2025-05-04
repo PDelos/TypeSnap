@@ -6,7 +6,7 @@
   <!-- Top right image -->
   <div class="flex w-full justify-end p-2"> 
     <img 
-      src="/assets/inici/GLYPHS.png" 
+      src="/assets/01.inici/GLYPHS.png" 
       alt="Logo" 
       class="h-10 object-contain"
     />
