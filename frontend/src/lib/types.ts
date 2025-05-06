@@ -14,6 +14,9 @@ export interface Typography {
 export interface Information {
     id: string;
     info: string;
+    settings: JSON;
+    photos: string[];
+    title: string;
     created: string;
     updated: string;
 }

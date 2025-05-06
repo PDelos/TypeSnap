@@ -1,22 +1,8 @@
-// src/hooks.server.ts
 import type { Handle } from '@sveltejs/kit';
-import { pb } from '$lib/pocketbase';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
-
-  try {
-    if (pb.authStore.isValid) {
-      await pb.collection('users').authRefresh();
-      event.locals.user = structuredClone(pb.authStore.record);
-    }
-  } catch (_) {
-    pb.authStore.clear();
-  }
-
-  event.locals.pb = pb;
-
+  // Code to run before response is generated
   const response = await resolve(event);
-  response.headers.set('set-cookie', pb.authStore.exportToCookie({ secure: false }));
+  // Code to run after response is generated
   return response;
 };
