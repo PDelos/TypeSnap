@@ -46,7 +46,7 @@
                 </div>
             </section>
 
-            <section class="h-[5%]">
+            <section class="h-[15%]">
             </section>
 
             <!-- Information -->
