@@ -6,7 +6,7 @@
   <!-- Top Section: Title -->
   <section class="flex flex-col justify-end items-center h-[40%]">
     <img 
-      src="/assets/01.inici/GLYPHS.png" 
+      src="/assets/GLYPHS.png" 
       alt="Logo" 
       class="w-[90%] "
     />
