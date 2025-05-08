@@ -32,7 +32,7 @@
       </button>
 
       <button 
-        onclick={() => goto('/capture')}
+        onclick={() => goto('/capture?model=gpt-4.1')}
         class="h-[30%] w-[60%] text-xl tracking-tighter rounded-2xl 
                bg-[#F7F7F7] text-[#1C1C1C] 
                hover:bg-[#FF00DB] hover:text-[#F7F7F7]

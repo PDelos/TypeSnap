@@ -1,6 +1,15 @@
-<script lang="ts"> 
+<script lang="ts">
+  let { data } = $props();
+  
+  const prompt = data.prompt;
+
+  
   // Define proper type for information
-  let information: string | null = null; // Will store the captured photo
+  let information= $state<string | null>(null); // Will store the captured photo
+  let isLoading = $state(false);
+  let classificationResult = $state<string | null>(null);
+  let error = $state<string | null>(null);
+  
 
   function handlePhotoClick(): void {
     // Create a file input configured to use the device camera
@@ -45,13 +54,41 @@
     input.click();
   }
   
-  function handleClassify(): void {
+  async function handleClassify(): Promise<void> {
     if (!information) {
       alert('Please capture or upload an image first');
       return;
     }
-    console.log("Classifying image...");
-    // Add your classification logic here
+
+    try {
+      isLoading = true;
+      error = null;
+      classificationResult = null;
+
+      const response = await fetch('/api/classify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          image: information, // base64 data:image
+          prompt // the full JSON prompt fetched from PocketBase
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Classification failed: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('Classification result:', result.text);
+      classificationResult = result.text;
+    } catch (err) {
+      console.error('Classification error:', err);
+      error = err instanceof Error ? err.message : 'An unknown error occurred';
+    } finally {
+      isLoading = false;
+    }
   }
 </script>
 
@@ -87,14 +124,26 @@
   
   <!-- Classify Button -->
   <button 
-    onclick={handleClassify}
-    class="bg-[#F7F7F7] hover:bg-[#FF00DB] active:bg-[#FF00DB] active:scale-95
-           rounded-lg flex justify-center items-center w-full
-           transition-all duration-150 cursor-pointer"
+  onclick={handleClassify}
+  class="{isLoading ? 'bg-[#FF00DB]' : 'bg-[#F7F7F7]'} hover:bg-[#FF00DB] active:bg-[#FF00DB] active:scale-95
+        rounded-lg flex justify-center items-center w-full gap-2
+        transition-all duration-150 cursor-pointer disabled:opacity-60"
+  disabled={isLoading}
   >
-    <p class="text-xl uppercase text-[#1C1C1C] p-2 
-              group-hover:text-[#F7F7F7] group-active:text-[#F7F7F7]">
+  {#if isLoading}
+    <svg class="animate-spin h-5 w-5 text-[#F7F7F7]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+    </svg>
+    <p class="text-xl uppercase text-[#F7F7F7] p-2">
+      Processing...
+    </p>
+  {:else}
+    <p class="text-xl uppercase text-[#1C1C1C] p-2">
       Classify
     </p>
+  {/if}
   </button>
+
+
 </section>

@@ -29,3 +29,9 @@ export interface User {
     created: string;
     updated: string;
 }
+
+export interface Prompt {
+    id: string;
+    model: string;
+    prompt: string;
+}

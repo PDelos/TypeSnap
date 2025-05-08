@@ -18,14 +18,16 @@
 
 {#if information}
     <!-- Content when information exists -->
-    <section class="w-full h-[80%] px-6">
-        <img 
-            src={getInfoImageUrl(information.id, information.title)}
-            alt="Title" 
-            class="w-full pb-4"
-        />
+    <section class="w-full h-full px-6 overflow-y-scroll">
+        <section class="w-full flex-none pb-4">
+            <img 
+                src={getInfoImageUrl(information.id, information.title)}
+                alt="Title" 
+                class="w-full"
+            />
+        </section>
 
-        <section class="flex flex-col h-full w-full">
+        <section class="flex flex-col gap-4">
             <!-- Images -->
             <section class="grid grid-cols-[2fr_1fr] gap-2">
                 <img 
@@ -46,7 +48,7 @@
                 </div>
             </section>
 
-            <section class="h-20">
+            <section class="flex h-[5%]">
             </section>
 
             <!-- Information -->

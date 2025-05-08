@@ -35,7 +35,7 @@
   </section>
   
   <!-- Main Content Section -->
-  <section class="flex-1">
+  <section class="h-[92%]">
     {@render children()}
   </section>
 </main>
