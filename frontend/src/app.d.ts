@@ -7,3 +7,4 @@ declare namespace App {
     user: Record<string, any> | null;
   }
 }
+

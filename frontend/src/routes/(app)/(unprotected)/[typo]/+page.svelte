@@ -46,23 +46,25 @@
                 </div>
             </section>
 
-            <section class="h-[15%]">
+            <section class="h-20">
             </section>
 
             <!-- Information -->
             <section class="grid grid-cols-2 gap-2">
-                <div class="flex justify-center items-start h-full w-full">
+                <div class="flex justify-center items-start h-full w-ful">
                     <img 
                         src={getTypoImageUrl(typography.id, typography.gimage)}
                         alt="Gimage" 
-                        class="w-full"
+                        class="max-w-[90%] max-h-[90%] object-contain"
                     />
                 </div>
                 <div class="flex flex-col">
-                    {#each information.settings.characteristics as characteristic}
-                        <p class="text-md font mb-1">{characteristic}</p>
-                        <hr class="border-t border-gray-300 mb-4" />
-                    {/each}
+                    <p class="text-md font-bold mb-1"> Vox-ATypI: {information.settings.vox_name}</p>
+                    <p class="text-sm font-thin mb-1 text-justify leading-relaxed">{information.settings.characteristics}</p>
+                    <hr class="border-t border-[#F7F7F7] mb-4" />
+                    <p class="text-md font-bold mb-1">Stephen Coles: {information.settings.col_name}</p>
+                    <p class="text-sm font-thin mb-1 text-justify leading-relaxed">{information.settings.justification}</p>
+                    <hr class="border-t border-[#F7F7F7] mb-4" />
                 </div>
                     
             </section>
