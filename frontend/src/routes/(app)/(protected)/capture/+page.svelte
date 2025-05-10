@@ -124,8 +124,7 @@
             replaceState: false,
             state: {
                 result: JSON.parse(result.text),
-                capturedImage: capturedImage, // Keep the base64 for display purposes
-                imageUrl: uploadResult.imageUrl, // Store the URL too
+                imageUrl: imageUrl, // Store the URL too
                 timestamp: new Date().toISOString()
             }
         });

@@ -5,10 +5,10 @@
     
     // Access the navigation state from the page store
     $: navigationState = $page.state || {};
-    $: capturedImage = navigationState.capturedImage;
+    $: imageUrl = navigationState.imageUrl;
     $: result = navigationState.result || {};
 
-    $: hasStateData = !!capturedImage && Object.keys(result || {}).length > 0;
+    $: hasStateData = !!imageUrl && Object.keys(result || {}).length > 0;
 
     import { onMount } from 'svelte';
 
@@ -29,7 +29,7 @@
     {#if hasStateData}
         <!-- Image Preview Area -->
         <div class="border-1 border-[#F7F7F7] rounded-lg h-[50%] flex justify-center items-center overflow-hidden">
-            <img src={capturedImage} alt="Captured" class="w-full h-full object-cover" />
+            <img src={imageUrl} alt="Captured" class="w-full h-full object-cover" />
         </div>
 
         <!-- Reason and confidence score -->
