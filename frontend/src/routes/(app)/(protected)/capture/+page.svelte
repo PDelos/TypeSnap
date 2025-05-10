@@ -67,7 +67,7 @@
       error = null;
       classificationResult = null;
 
-      const response = await fetch('/api/classify', {
+      const response = await fetch('/service/classify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

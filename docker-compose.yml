@@ -1,21 +1,19 @@
-version: "3.8"
-
 services:
   sveltekit:
-    build: ./sveltekit
+    build: ./frontend
     container_name: sveltekit
     restart: always
     env_file:
-      - ./sveltekit/.env
+      - ./frontend/.env
     expose:
       - "3000"
 
   pocketbase:
-    build: ./pocketbase
+    build: ./backend
     container_name: pocketbase
     restart: always
     volumes:
-      - ./pocketbase/pb_data:/app/pb_data
+      - ./backend/pb_data:/app/pb_data
     expose:
       - "8090"
 

@@ -81,7 +81,7 @@
                     <div class="flex flex-col">
                         <div class="mb-4 pb-2 border-b border-[#F7F7F7]">
                             <h2 class="text-lg font-bold tracking-wide uppercase">
-                                Stephen Coles Classification
+                                Stephen Coles (2013)
                             </h2>
                             <p class="text-lg mt-1 ">
                                 {information.settings.col_name}
