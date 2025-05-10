@@ -58,48 +58,49 @@
   
   async function handleClassify(): Promise<void> {
     if (!capturedImage) {
-      alert('Please capture or upload an image first');
-      return;
+        alert('Please capture or upload an image first');
+        return;
     }
 
     try {
-      isLoading = true;
-      error = null;
-      classificationResult = null;
+        isLoading = true;
+        error = null;
+        classificationResult = null;
 
-      const response = await fetch('/service/classify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          image: capturedImage, // base64 data:image
-          prompt // the full JSON prompt fetched from PocketBase
-        })
-      });
+        alert('Sending classification request...');
+        const response = await fetch('/service/classify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image: capturedImage, // base64 data:image
+                prompt // the full JSON prompt fetched from PocketBase
+            })
+        });
 
-      if (!response.ok) {
-        throw new Error(`Classification failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log('Classification result:', result);
-      classificationResult = result.text;
-
-      await goto(`/capture/result`, {
-        replaceState: false,
-        state: {
-          result: JSON.parse(result.text),
-          capturedImage: capturedImage,
-          timestamp: new Date().toISOString()
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert('Classification failed: ' + errorText);
+            throw new Error(`Classification failed: ${response.statusText}`);
         }
-      });
-      
+
+        const result = await response.json();
+        classificationResult = result.text;
+
+        await goto(`/capture/result`, {
+            replaceState: false,
+            state: {
+                result: JSON.parse(result.text),
+                capturedImage: capturedImage,
+                timestamp: new Date().toISOString()
+            }
+        });
     } catch (err) {
-      console.error('Classification error:', err);
-      error = err instanceof Error ? err.message : 'An unknown error occurred';
+        alert('Classification error: ' + (err instanceof Error ? err.message : 'An unknown error occurred'));
+        error = err instanceof Error ? err.message : 'An unknown error occurred';
     } finally {
-      isLoading = false;
+        isLoading = false;
     }
   }
 </script>
