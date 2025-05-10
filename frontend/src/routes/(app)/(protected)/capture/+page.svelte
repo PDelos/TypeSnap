@@ -7,11 +7,24 @@
 
   
   // Define proper type for capturedImage
-  let capturedImage= $state<string | null>(null); // Will store the captured photo
+  let capturedImage = $state<string | null>(null); // Will store the captured photo
+  let capturedImageFile = $state<File | null>(null); // Will store the actual file object
   let isLoading = $state(false);
   let classificationResult = $state<string | null>(null);
   let error = $state<string | null>(null);
   
+
+  function validateImageSize(file: File): boolean {
+    const maxSizeInMB = 4; // Maximum allowed size in MB
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+    if (file.size > maxSizeInBytes) {
+        alert(`The selected image exceeds the maximum size of ${maxSizeInMB}MB. Please choose a smaller image.`);
+        return false;
+    }
+
+    return true;
+}
 
   function handlePhotoClick(): void {
     // Create a file input configured to use the device camera
@@ -23,7 +36,8 @@
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
-      if (file) {
+      if (file && validateImageSize(file)) {
+        capturedImageFile = file; // Store the file object for later upload
         const reader = new FileReader();
         reader.onload = (event: ProgressEvent<FileReader>) => {
           capturedImage = event.target?.result as string;
@@ -44,7 +58,8 @@
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
-      if (file) {
+      if (file && validateImageSize(file)) {
+        capturedImageFile = file; // Store the file object for later upload
         const reader = new FileReader();
         reader.onload = (event: ProgressEvent<FileReader>) => {
           capturedImage = event.target?.result as string;
@@ -57,7 +72,7 @@
   }
   
   async function handleClassify(): Promise<void> {
-    if (!capturedImage) {
+    if (!capturedImage || !capturedImageFile) {
         alert('Please capture or upload an image first');
         return;
     }
@@ -67,18 +82,37 @@
         error = null;
         classificationResult = null;
 
-        alert('Sending classification request...');
+        // First, upload the image to PocketBase via the /api/upload endpoint
+        const formData = new FormData();
+        formData.append('image', capturedImageFile);
+        
+        console.log('Uploading image to PocketBase...');
+        const uploadResponse = await fetch('/service/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!uploadResponse.ok) {
+            const errorText = await uploadResponse.text();
+            throw new Error(`Upload failed: ${errorText}`);
+        }
+        
+        const uploadResult = await uploadResponse.json();
+        console.log('Image uploaded successfully:', uploadResult);
+        
+        // Then use the image URL for classification
+        console.log('Using prompt:', prompt);
         const response = await fetch('/service/classify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                image: capturedImage, // base64 data:image
+                imageUrl: uploadResult.imageUrl, // Use the URL instead of base64
                 prompt // the full JSON prompt fetched from PocketBase
             })
         });
-
+        
         if (!response.ok) {
             const errorText = await response.text();
             alert('Classification failed: ' + errorText);
@@ -92,12 +126,13 @@
             replaceState: false,
             state: {
                 result: JSON.parse(result.text),
-                capturedImage: capturedImage,
+                capturedImage: capturedImage, // Keep the base64 for display purposes
+                imageUrl: uploadResult.imageUrl, // Store the URL too
                 timestamp: new Date().toISOString()
             }
         });
     } catch (err) {
-        alert('Classification error: ' + (err instanceof Error ? err.message : 'An unknown error occurred'));
+        alert('Error: ' + (err instanceof Error ? err.message : 'An unknown error occurred'));
         error = err instanceof Error ? err.message : 'An unknown error occurred';
     } finally {
         isLoading = false;

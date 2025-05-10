@@ -26,7 +26,7 @@
   {#each filteredTypographies as typography}
     <!-- Typography Item Card -->
     <div class="m-2">
-      <h2 class="text-md font-bold uppercase">{typography.name}</h2>
+      <h2 class="text-md font-semibold tracking-tight uppercase">{typography.name}</h2>
       <button 
         onclick={() => goto('/' + typography.id)}
         class="flex items-center justify-center rounded-xl border-1 
