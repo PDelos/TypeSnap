@@ -47,6 +47,24 @@ img, svg {
   ============================== */
 @font-face {
   font-family: 'Sloop';
-  src: url('/fonts/CustomFont.ttf') format('truetype');
+  font-style: normal;
   font-display: swap;
+  font-weight: 400;
+  src: url('/fonts/CustomFont.ttf');
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('/fonts/typo_info.ttf');
+}
+
+@font-face {
+  font-family: 'Gotham Black';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('/fonts/typo_title.otf');
 }

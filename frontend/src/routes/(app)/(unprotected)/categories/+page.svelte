@@ -15,17 +15,23 @@
 
 <!-- Main Categories Section -->
 <section class="flex justify-center h-[70%]">
-<div class="gap-4 flex flex-col items-center w-full px-6">
-  {#each types as type}
-    <button 
-      onclick={() => goto('/categories/' + type)}
-      class="h-full w-full text-4xl font-sloop rounded-lg border-1 border-[#F7F7F7] 
-             hover:bg-[#FF00DB] hover:text-[#F7F7F7]
-             active:bg-[#FF00DB] active:text-[#F7F7F7] active:scale-95
-             transition-all duration-150"
-    >
-      {type}
-    </button>
-  {/each}
-</div>
+  <div class="gap-4 flex flex-col items-center justify-center w-full px-6">
+    {#each types as type}
+      <button 
+        onclick={() => goto('/categories/' + type)}
+        class="h-full w-full text-7xl rounded-lg border-1 border-[#F7F7F7] 
+              hover:bg-[#FF00DB] hover:text-[#F7F7F7]
+              active:bg-[#FF00DB] active:text-[#F7F7F7] active:scale-95
+              transition-all duration-150"
+      >
+        {type}
+      </button>
+    {/each}
+  </div>
 </section>
+
+<style>
+  button {
+    font-family: 'Sloop', cursive;
+  }
+</style>

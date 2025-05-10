@@ -7,7 +7,7 @@
   <section class="w-full h-full">
     <section class="flex flex-col justify-end items-center h-[30%]">
       <img 
-        src="assets/CATEGORIZE.png" 
+        src="/assets/CATEGORIZE.png" 
         alt="Title" 
         class="w-[97%] mb-2"
       />

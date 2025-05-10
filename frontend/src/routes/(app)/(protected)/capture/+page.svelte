@@ -1,11 +1,13 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
+
   let { data } = $props();
   
   const prompt = data.prompt;
 
   
-  // Define proper type for information
-  let information= $state<string | null>(null); // Will store the captured photo
+  // Define proper type for capturedImage
+  let capturedImage= $state<string | null>(null); // Will store the captured photo
   let isLoading = $state(false);
   let classificationResult = $state<string | null>(null);
   let error = $state<string | null>(null);
@@ -24,7 +26,7 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = (event: ProgressEvent<FileReader>) => {
-          information = event.target?.result as string;
+          capturedImage = event.target?.result as string;
         };
         reader.readAsDataURL(file);
       }
@@ -45,7 +47,7 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = (event: ProgressEvent<FileReader>) => {
-          information = event.target?.result as string;
+          capturedImage = event.target?.result as string;
         };
         reader.readAsDataURL(file);
       }
@@ -55,7 +57,7 @@
   }
   
   async function handleClassify(): Promise<void> {
-    if (!information) {
+    if (!capturedImage) {
       alert('Please capture or upload an image first');
       return;
     }
@@ -71,7 +73,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          image: information, // base64 data:image
+          image: capturedImage, // base64 data:image
           prompt // the full JSON prompt fetched from PocketBase
         })
       });
@@ -81,8 +83,18 @@
       }
 
       const result = await response.json();
-      console.log('Classification result:', result.text);
+      console.log('Classification result:', result);
       classificationResult = result.text;
+
+      await goto(`/capture/result`, {
+        replaceState: false,
+        state: {
+          result: JSON.parse(result.text),
+          capturedImage: capturedImage,
+          timestamp: new Date().toISOString()
+        }
+      });
+      
     } catch (err) {
       console.error('Classification error:', err);
       error = err instanceof Error ? err.message : 'An unknown error occurred';
@@ -96,8 +108,8 @@
 <section class="flex flex-col gap-4 h-[65%] px-14">
   <!-- Image Preview Area -->
   <div class="border-1 border-[#F7F7F7] rounded-lg h-[40%] flex justify-center items-center overflow-hidden">
-    {#if information}
-      <img src={information} alt="Captured" class="w-full h-full object-cover" />
+    {#if capturedImage}
+      <img src={capturedImage} alt="Captured" class="w-full h-full object-cover" />
     {:else}
       <p>Upload an image</p>
     {/if}
