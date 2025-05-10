@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY pocketbase /app/pocketbase
 COPY pb_data /app/pb_data
+COPY pb_hooks /app/pb_hooks
+
 
 RUN chmod +x /app/pocketbase
 
