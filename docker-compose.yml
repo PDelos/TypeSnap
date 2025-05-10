@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  sveltekit:
+    build: ./sveltekit
+    container_name: sveltekit
+    restart: always
+    env_file:
+      - ./sveltekit/.env
+    expose:
+      - "3000"
+
+  pocketbase:
+    build: ./pocketbase
+    container_name: pocketbase
+    restart: always
+    volumes:
+      - ./pocketbase/pb_data:/app/pb_data
+    expose:
+      - "8090"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - sveltekit
+      - pocketbase
