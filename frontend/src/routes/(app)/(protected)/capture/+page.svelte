@@ -1,5 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
+    import { pb } from '$lib/pocketbase';
+
 
   let { data } = $props();
   
@@ -83,32 +85,28 @@
         classificationResult = null;
 
         // First, upload the image to PocketBase via the /api/upload endpoint
-        const formData = new FormData();
-        formData.append('image', capturedImageFile);
-        
+
         console.log('Uploading image to PocketBase...');
-        const uploadResponse = await fetch('/service/upload', {
-            method: 'POST',
-            body: formData
-        });
+        const pbFormData = new FormData();
+        pbFormData.append('image', capturedImageFile);
+        pbFormData.append('created', new Date().toISOString());
         
-        if (!uploadResponse.ok) {
-            const errorText = await uploadResponse.text();
-            throw new Error(`Upload failed: ${errorText}`);
-        }
+        const record = await pb.collection('photos').create(pbFormData);
+        const imageUrl = pb.files.getURL(record, record.image);
         
-        const uploadResult = await uploadResponse.json();
-        console.log('Image uploaded successfully:', uploadResult);
         
         // Then use the image URL for classification
+        console.log('Image uploaded successfully:', imageUrl);
         console.log('Using prompt:', prompt);
+
+        
         const response = await fetch('/service/classify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                imageUrl: uploadResult.imageUrl, // Use the URL instead of base64
+                imageUrl: imageUrl, // Use the URL instead of base64
                 prompt // the full JSON prompt fetched from PocketBase
             })
         });
